@@ -170,4 +170,4 @@ This project is for educational purposes.
 
 ---
 
-> Built with ❤️ by the RecipeNest Team
+> Built with ❤️ by the Melan Parajuli
