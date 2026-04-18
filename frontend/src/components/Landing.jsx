@@ -20,10 +20,10 @@ const Landing = () => {
         </div>
 
         <div className="landing-buttons">
-          <Link to ="/login" className="landing-btn landing-btn-primary">
+          <Link to ="/signup" className="landing-btn landing-btn-primary">
             Get Started
           </Link>
-          <Link to="/signup" className="landing-btn landing-btn-outline">
+          <Link to="/login" className="landing-btn landing-btn-outline">
             Sign In
           </Link>
         </div>
