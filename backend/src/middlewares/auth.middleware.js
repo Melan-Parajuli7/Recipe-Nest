@@ -1,3 +1,4 @@
+// middleware/auth.middleware.js
 const jwt = require("jsonwebtoken");
 const User = require("../models/users.models");
 const { JWT_SECRET } = require("../config/config");
@@ -6,7 +7,6 @@ const protect = async (req, res, next) => {
   try {
     let token;
 
-    // Extract token from Authorization header
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
@@ -14,7 +14,6 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    // If no token found
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -22,10 +21,8 @@ const protect = async (req, res, next) => {
       });
     }
 
-    // Verify token
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Find user and attach to request
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
@@ -35,12 +32,10 @@ const protect = async (req, res, next) => {
       });
     }
 
-    // Attach user to request object
     req.user = user;
     next();
   } catch (error) {
     console.error("Auth Middleware Error:", error.message);
-
     return res.status(401).json({
       success: false,
       message: "Not authorized. Token is invalid or expired.",
@@ -48,28 +43,28 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Fixed adminOnly middleware (was using wrong 'req.cus')
+// Admin only middleware (must be used AFTER protect)
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(403).json({
-      success: false,
-      message: "Not authorized. Admin access required.",
-    });
+    return next();
   }
+
+  return res.status(403).json({
+    success: false,
+    message: "Access denied. Admin privileges required.",
+  });
 };
 
-// Fixed userOnly middleware (was using wrong 'req.cus')
+// Optional: Regular user or admin
 const userOnly = (req, res, next) => {
   if (req.user && (req.user.role === "user" || req.user.role === "admin")) {
-    next();
-  } else {
-    res.status(403).json({
-      success: false,
-      message: "Not authorized. User access required.",
-    });
+    return next();
   }
+
+  return res.status(403).json({
+    success: false,
+    message: "Access denied. User access required.",
+  });
 };
 
 module.exports = {

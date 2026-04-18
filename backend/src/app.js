@@ -7,10 +7,11 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.routes");
 const recipeRoutes = require("./routes/recipe.routes");
 const commentRoutes = require("./routes/comment.routes");
+const adminRoutes = require("./routes/admin.routes");
 
 const app = express();
 
-// CORS
+// ====================== MIDDLEWARE ======================
 app.use(cors({
   origin: CLIENT_URL,
   credentials: true,
@@ -26,14 +27,25 @@ if (NODE_ENV === "development") {
   });
 }
 
-// ====================== CORRECT STATIC SERVING ======================
-const uploadsPath = path.join(__dirname, '../uploads');   // Go up only ONE level (from src to backend)
+// ====================== STATIC FILE SERVING (FIXED) ======================
+const uploadsRoot = path.join(__dirname, "../uploads");
+const profilePicsPath = path.join(uploadsRoot, "profile_pics");
+const recipeImagesPath = path.join(uploadsRoot, "recipe_images");
 
-console.log("Serving uploads from:", uploadsPath);
+console.log("✅ Serving uploads from:", uploadsRoot);
+console.log("✅ Profile pics folder:", profilePicsPath);
+console.log("✅ Recipe images folder:", recipeImagesPath);
 
-app.use('/uploads', express.static(uploadsPath));
+// Serve static files
+app.use("/uploads", express.static(uploadsRoot));
 
-// Database
+// Extra safety routes (supports both correct and incorrect folder names in DB)
+app.use("/uploads/profile_pics", express.static(profilePicsPath));
+app.use("/uploads/profilePics", express.static(profilePicsPath));   // for old records with capital P
+
+console.log("✅ Static middleware for /uploads registered successfully");
+
+// ====================== DATABASE & ROUTES ======================
 connectDB();
 
 // Health check
@@ -50,8 +62,10 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/admin", adminRoutes);
 
-// 404 handler (AFTER static)
+// ====================== ERROR HANDLING ======================
+// 404 handler - MUST be after static middleware and routes
 app.use((req, res, next) => {
   const error = new Error(`Route not found: ${req.originalUrl}`);
   error.statusCode = 404;
@@ -69,9 +83,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Uploads folder being served from: ${uploadsPath}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📁 Uploads folder served from: ${uploadsRoot}`);
 });
 
 module.exports = app;

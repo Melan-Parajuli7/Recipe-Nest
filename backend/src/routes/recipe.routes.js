@@ -49,6 +49,9 @@ router.get("/my-recipes", protect, recipeController.getMyRecipes);
 // GET  /api/recipes/:id  ← wildcard, comes last among GETs
 router.get("/:id", recipeController.getRecipeById);
 
+// GET  /api/recipes/categories  ← add this before /:id
+router.get("/categories", recipeController.getCategories);
+
 // ═════════════════════════════════════════════
 // OTHER PRIVATE ROUTES
 // ═════════════════════════════════════════════

@@ -112,17 +112,20 @@ const login = async (req, res) => {
 
     const { email, password } = req.body;
     const result = await userService.loginUser(email, password);
+
+    // IMPORTANT: Make sure result contains the full user with role
     res.status(200).json({ 
       success: true, 
       message: result.message, 
-      jwtToken : result.jwtToken, 
+      jwtToken: result.jwtToken, 
       name: result.name,
+      // Optional: you can also send role here for extra safety
+      role: result.role
     });
   } catch (error) {
     handleError(res, error);
   }
 };
-
 const getProfile = async (req, res) => {
   try {
     const result = await userService.getUserProfile(req.user.id);
@@ -154,12 +157,21 @@ const updateProfile = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const options = {
-      page: req.query.page,
-      limit: req.query.limit,
+      page: req.query.page || 1,
+      limit: req.query.limit || 100,
       includeInactive: req.query.includeInactive === "true",
     };
+
     const result = await userService.getAllUsers(options);
-    res.status(200).json({ success: true, data: result.data });
+
+    // ✅ Fixed: Send users directly in a clean structure
+    res.status(200).json({
+      success: true,
+      users: result.data?.users || [],        // Main array for frontend
+      count: result.data?.users?.length || 0,
+      pagination: result.data?.pagination || null,
+    });
+
   } catch (error) {
     handleError(res, error);
   }

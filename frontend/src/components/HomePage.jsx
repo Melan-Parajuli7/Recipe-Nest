@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "./utils";
 import { ToastContainer } from "react-toastify";
+import CommentSection from "./CommentSection";
 
 const API_BASE_URL = "http://localhost:3000";
 
@@ -478,6 +479,10 @@ const HomePage = () => {
                   </div>
                 </>
               )}
+
+              {/* ── Comments ── */}
+              <CommentSection recipeId={selectedRecipe._id} />
+
             </div>
           </div>
         </div>

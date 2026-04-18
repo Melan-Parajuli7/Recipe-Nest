@@ -6,6 +6,8 @@
  */
 
 const recipeService = require("../services/recipes.services");
+const Recipe = require("../models/recipes.models");
+
 
 // ─────────────────────────────────────────────
 // Helper — sends a consistent success response
@@ -30,10 +32,8 @@ const handleError = (res, error) => {
 // ═════════════════════════════════════════════
 const createRecipe = async (req, res) => {
   try {
-    // Parse JSON fields that arrive as strings (multipart/form-data)
     const recipeData = { ...req.body };
 
-    // Parse array / object fields that are sent as JSON strings
     const jsonFields = [
       "ingredients",
       "steps",
@@ -47,16 +47,14 @@ const createRecipe = async (req, res) => {
       if (recipeData[field] && typeof recipeData[field] === "string") {
         try {
           recipeData[field] = JSON.parse(recipeData[field]);
-        } catch (_) {
-          // leave as-is if it can't be parsed
-        }
+        } catch (_) {}
       }
     });
 
     const recipe = await recipeService.createRecipe(
       recipeData,
       req.user._id,
-      req.files // { thumbnail: [...], images: [...] }
+      req.files
     );
 
     sendSuccess(res, 201, "Recipe created successfully", { recipe });
@@ -80,6 +78,20 @@ const getAllRecipes = async (req, res) => {
 };
 
 // ═════════════════════════════════════════════
+// @route   GET /api/recipes/categories
+// @desc    Get all unique recipe categories
+// @access  Public
+// ═════════════════════════════════════════════
+const getCategories = async (req, res) => {
+  try {
+    const categories = await Recipe.distinct("category");
+    res.json({ success: true, data: categories });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ═════════════════════════════════════════════
 // @route   GET /api/recipes/featured
 // @desc    Get featured recipes
 // @access  Public
@@ -99,8 +111,6 @@ const getFeaturedRecipes = async (req, res) => {
 // @desc    Get current user's saved/bookmarked recipes
 // @access  Private
 // ═════════════════════════════════════════════
-// controllers/recipes.controller.js
-
 const getSavedRecipes = async (req, res, next) => {
   try {
     const userId = req.user?._id || req.user?.id;
@@ -108,7 +118,7 @@ const getSavedRecipes = async (req, res, next) => {
     if (!userId) {
       return res.status(401).json({
         success: false,
-        message: "Not authorized. Please login."
+        message: "Not authorized. Please login.",
       });
     }
 
@@ -117,13 +127,14 @@ const getSavedRecipes = async (req, res, next) => {
     res.status(200).json({
       success: true,
       recipes,
-      count: recipes.length
+      count: recipes.length,
     });
   } catch (error) {
     console.error("Get saved recipes error:", error);
-    next(error);   // or res.status(500).json({ success: false, message: error.message })
+    next(error);
   }
 };
+
 // ═════════════════════════════════════════════
 // @route   GET /api/recipes/my-recipes
 // @desc    Get recipes created by the logged-in user
@@ -181,7 +192,6 @@ const updateRecipe = async (req, res) => {
   try {
     const updateData = { ...req.body };
 
-    // Parse stringified JSON fields (multipart/form-data)
     const jsonFields = [
       "ingredients",
       "steps",
@@ -238,7 +248,7 @@ const deleteRecipe = async (req, res) => {
 const toggleSaveRecipe = async (req, res, next) => {
   try {
     const { id: recipeId } = req.params;
-    const userId = req.user._id || req.user.id;   // Adjust based on your protect middleware
+    const userId = req.user._id || req.user.id;
 
     if (!userId) {
       return res.status(401).json({ success: false, message: "User not authenticated" });
@@ -249,9 +259,9 @@ const toggleSaveRecipe = async (req, res, next) => {
     res.status(200).json({
       success: true,
       ...result,
-      message: result.saved 
-        ? "Recipe saved successfully" 
-        : "Recipe removed from saved"
+      message: result.saved
+        ? "Recipe saved successfully"
+        : "Recipe removed from saved",
     });
   } catch (error) {
     next(error);
@@ -297,6 +307,7 @@ const toggleFeatured = async (req, res) => {
 module.exports = {
   createRecipe,
   getAllRecipes,
+  getCategories,       
   getFeaturedRecipes,
   getSavedRecipes,
   getMyRecipes,

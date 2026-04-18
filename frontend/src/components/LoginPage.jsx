@@ -43,23 +43,24 @@ const Login = () => {
 
       const { success, message, jwtToken, name } = data;
 
-      if (success) {
-        // ADD THESE TWO LINES — clear old user's data first
+      if (success && jwtToken) {
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("loggedInUser");
 
-        // Then store new user's data
         localStorage.setItem("jwtToken", jwtToken);
-        localStorage.setItem("loggedInUser", name);
+        localStorage.setItem("loggedInUser", name || "");
 
         handleSuccess(message);
-        navigate("/home");
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 400);
       } else {
         handleError(message || data.errors?.[0] || "Login failed");
       }
     } catch (err) {
       console.error(err);
-      handleError(err.message);
+      handleError(err.message || "Something went wrong");
     }
   };
 

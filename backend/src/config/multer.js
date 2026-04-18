@@ -132,7 +132,8 @@ const recipeImagesUpload = multer({
 const getFileUrl = (filename, type) => {
   if (!filename) return null;
 
-  const folder = type === "profilePic" ? "profilePics" : "postImages";
+  // Match the actual folder names
+  const folder = type === "profilePic" ? "profile_pics" : "recipe_images";
 
   return `/uploads/${folder}/${filename}`;
 };

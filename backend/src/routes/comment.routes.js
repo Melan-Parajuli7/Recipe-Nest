@@ -70,7 +70,7 @@ router.get("/my-comments", protect, commentController.getMyComments);
 // PUT  /api/comments/:commentId
 // → edit own comment (content and/or rating)
 // Body: { content?, rating? }
-router.put("/:commentId", protect, commentController.updateComment);
+router.patch("/:commentId", protect, commentController.updateComment);
 
 // DELETE /api/comments/:commentId
 // → soft-delete own comment (also soft-deletes its replies)

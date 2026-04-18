@@ -1,4 +1,5 @@
 const User = require("../models/users.models");
+const jwt = require("jsonwebtoken");
 const { getFileUrl, deleteOldFile } = require("../config/multer"); 
 
 // register user
@@ -31,6 +32,7 @@ const registerUser = async (userData) =>{
 };
 
 // login user
+// login user
 const loginUser = async (email, password) => {
   try {
     const user = await User.findOne({ email }).select("+password");
@@ -54,7 +56,9 @@ const loginUser = async (email, password) => {
       throw error;
     }
 
+    // Generate token using your model method (which already includes role)
     const token = user.generateJWT();
+
     const userObject = user.toObject();
     delete userObject.password;
 
@@ -62,8 +66,9 @@ const loginUser = async (email, password) => {
       success: true,
       message: "Login successful",
       jwtToken: token,    
-      name: userObject.name     
-       };
+      name: userObject.name,
+      // No need to send role in response — it's inside the JWT
+    };
   } catch (error) {
     console.error("Error in loginUser:", error.message);
     throw error;

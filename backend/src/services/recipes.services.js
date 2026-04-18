@@ -6,7 +6,8 @@
  */
 
 const Recipe = require("../models/recipes.models");
-const mongoose = require("mongoose");   
+const mongoose = require("mongoose");
+const { getFileUrl } = require("../config/multer");
 
 // ═════════════════════════════════════════════
 // CREATE
@@ -14,10 +15,10 @@ const mongoose = require("mongoose");
 
 const createRecipe = async (recipeData, authorId, files = {}) => {
   if (files.thumbnail && files.thumbnail[0]) {
-    recipeData.thumbnail = files.thumbnail[0].path;
+    recipeData.thumbnail = getFileUrl(files.thumbnail[0].filename, "postImages");
   }
   if (files.images && files.images.length > 0) {
-    recipeData.images = files.images.map((file) => file.path);
+    recipeData.images = files.images.map((file) => getFileUrl(file.filename, "postImages"));
   }
   const recipe = await Recipe.create({ ...recipeData, author: authorId });
   return recipe;
@@ -146,11 +147,11 @@ const updateRecipe = async (recipeId, authorId, updateData, files = {}) => {
   }
 
   if (files.thumbnail && files.thumbnail[0]) {
-    updateData.thumbnail = files.thumbnail[0].path;
+    updateData.thumbnail = getFileUrl(files.thumbnail[0].filename, "postImages");
   }
 
   if (files.images && files.images.length > 0) {
-    const newImagePaths = files.images.map((f) => f.path);
+    const newImagePaths = files.images.map((f) => getFileUrl(f.filename, "postImages"));
     updateData.images = [...(recipe.images || []), ...newImagePaths];
   }
 
@@ -229,6 +230,7 @@ const toggleSaveRecipe = async (recipeId, userId) => {
 
   return result;
 };
+
 /**
  * Get all recipes saved/bookmarked by a user.
  *
