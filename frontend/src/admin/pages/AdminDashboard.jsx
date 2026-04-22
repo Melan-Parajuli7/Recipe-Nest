@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";        // ← This was missing!
+import Sidebar from "../../shared/components/SideBar";       
 
 const AdminDashboard = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "./Footer";
+import Footer from "../../shared/components/Footer";
 
 const API_BASE_URL = "http://localhost:3000";
 

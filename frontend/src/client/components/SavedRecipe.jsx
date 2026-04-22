@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { handleSuccess } from "./utils";   // Keep your existing toast helper
-
+import { handleSuccess } from "../../shared/utils/utils";  
+ 
 const API_BASE_URL = "http://localhost:3000";
 
 const SavedRecipes = () => {

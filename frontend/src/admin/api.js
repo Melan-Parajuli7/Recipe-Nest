@@ -1,10 +1,10 @@
 /**
  * api.js — Recipe Nest Admin API Helper
  *
- * Reads the JWT token from localStorage (key: "token").
+ * Reads the JWT token from localStorage (key: "jwtToken").
  * All admin calls use the Authorization: Bearer <token> header.
  *
- * Base URL reads from VITE_API_URL env var, falls back to localhost:5000.
+ * Base URL reads from VITE_API_URL env var, falls back to localhost:3000.
  */
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -53,6 +53,20 @@ export const getUserById = (id) => request(`/api/users/${id}`);
 
 /**
  * DELETE /api/users/:id
+ * Permanently deletes a user (admin only).
+ */
+export const deleteUser = (id) =>
+  request(`/api/users/${id}`, { method: "DELETE" });
+
+/**
+ * PATCH /api/users/:id/status
+ * Toggles the isActive status of a user (admin only).
+ */
+export const toggleUserStatus = (id) =>
+  request(`/api/users/${id}/status`, { method: "PATCH" });
+
+/**
+ * DELETE /api/users/:id (soft delete)
  * Deactivates (soft-deletes) a user.
  */
 export const deactivateUser = (id) =>
@@ -111,21 +125,6 @@ export const getAllComments = (params = {}) => {
     Object.fromEntries(Object.entries(params).filter(([, v]) => v != null && v !== ""))
   ).toString();
   return request(`/api/comments${qs ? `?${qs}` : ""}`);
-};
-
-export const deleteUser = async (userId) => {
-  const token = localStorage.getItem("token");
-  return axios.delete(`/api/admin/users/${userId}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-};
-
-// Add this function in your api.js
-export const toggleUserStatus = async (userId) => {
-  const token = localStorage.getItem('token');
-  return axios.patch(`/api/admin/users/${userId}/status`, {}, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
 };
 
 /**

@@ -178,11 +178,7 @@ const changePassword = async (userId, currentPassword, newPassword) => {
 
 const deactivateUser = async (userId) => {
   try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { isActive: false },
-      { new: true },
-    );
+    const user = await User.findByIdAndDelete(userId);
 
     if (!user) {
       const error = new Error("User not found");
@@ -190,7 +186,7 @@ const deactivateUser = async (userId) => {
       throw error;
     }
 
-    return { success: true, message: "User deactivated successfully" };
+    return { success: true, message: "User deleted successfully" };
   } catch (error) {
     console.error("Error in deactivateUser:", error.message);
     throw error;

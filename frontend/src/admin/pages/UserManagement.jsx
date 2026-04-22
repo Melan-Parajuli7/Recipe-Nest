@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import Sidebar from "./Sidebar";
-import { getAllUsers, deleteUser } from "./api";
+import Sidebar from "../../shared/components/SideBar";       
+import { getAllUsers, deleteUser } from "../api";
+
 
 const formatDate = (iso) => {
   if (!iso) return "—";

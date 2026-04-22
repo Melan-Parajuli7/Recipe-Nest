@@ -1,26 +1,27 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
-import Landing from './components/Landing';
-import HomePage from './components/HomePage';
-import AddRecipe from './components/AddRecipe';
-import Recipe from './components/Recipe';
-import ProfilePage from './components/ProfilePage';
-import SavedRecipes from './components/SavedRecipes';
-import Footer from './components/Footer';
+// Corrected imports based on your file structure
+import LoginPage from './client/components/LoginPage';
+import SignupPage from './client/components/SignupPage';
+import Landing from './client/components/LandingPage';
+import HomePage from './client/components/HomePage';
+import AddRecipe from './client/components/AddRecipe';
+import Recipe from './client/components/Recipe';
+import ProfilePage from './client/components/ProfilePage';
+import SavedRecipes from './client/components/SavedRecipe'; 
+import Footer from './shared/components/Footer'; 
 
 import 'react-toastify/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
-import RefreshHandler from './components/RefreshHandler';
+import RefreshHandler from './shared/utils/RefreshHandler';
 
 // === ADMIN PAGES ===
-import AdminDashboard from "./components/AdminDashboard";
-import UserManagement from "./components/UserManagement";
-import RecipeManagement from "./components/RecipeManagement";
-import CommentManagement from "./components/CommentManagement";
+import AdminDashboard from "./admin/pages/AdminDashboard";
+import UserManagement from "./admin/pages/UserManagement";
+import RecipeManagement from "./admin/pages/RecipeManagement";
+import CommentManagement from "./admin/pages/CommentManagement";
 
 const HIDE_FOOTER_ON = [
   '/landing', 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import Sidebar from "./Sidebar";
-import { getAllRecipes, deleteRecipe, toggleFeaturedRecipe, changeRecipeStatus } from "./api";
+import Sidebar from "../../shared/components/SideBar";       
+import { getAllRecipes, deleteRecipe, toggleFeaturedRecipe, changeRecipeStatus } from "../api";
 
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 

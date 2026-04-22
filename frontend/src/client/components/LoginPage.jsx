@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { handleError, handleSuccess } from "./utils";
+import { handleError, handleSuccess } from "../../shared/utils/utils";
 
 const Login = () => {
   const [loginInfo, setLoginInfo] = React.useState({
