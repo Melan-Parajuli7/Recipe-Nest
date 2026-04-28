@@ -6,7 +6,6 @@ const { JWT_SECRET } = require("../config/config");
 const protect = async (req, res, next) => {
   try {
     let token;
-
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")

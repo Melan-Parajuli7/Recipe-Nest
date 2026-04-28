@@ -31,7 +31,7 @@ const registerUser = async (userData) =>{
   }
 };
 
-// login user
+
 // login user
 const loginUser = async (email, password) => {
   try {

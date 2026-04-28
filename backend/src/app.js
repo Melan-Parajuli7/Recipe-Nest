@@ -32,9 +32,9 @@ const uploadsRoot = path.join(__dirname, "../uploads");
 const profilePicsPath = path.join(uploadsRoot, "profile_pics");
 const recipeImagesPath = path.join(uploadsRoot, "recipe_images");
 
-console.log("✅ Serving uploads from:", uploadsRoot);
-console.log("✅ Profile pics folder:", profilePicsPath);
-console.log("✅ Recipe images folder:", recipeImagesPath);
+console.log(" Serving uploads from:", uploadsRoot);
+console.log(" Profile pics folder:", profilePicsPath);
+console.log(" Recipe images folder:", recipeImagesPath);
 
 // Serve static files
 app.use("/uploads", express.static(uploadsRoot));
@@ -43,7 +43,7 @@ app.use("/uploads", express.static(uploadsRoot));
 app.use("/uploads/profile_pics", express.static(profilePicsPath));
 app.use("/uploads/profilePics", express.static(profilePicsPath));   // for old records with capital P
 
-console.log("✅ Static middleware for /uploads registered successfully");
+console.log(" Static middleware for /uploads registered successfully");
 
 // ====================== DATABASE & ROUTES ======================
 connectDB();
@@ -85,8 +85,8 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📁 Uploads folder served from: ${uploadsRoot}`);
+  console.log(` Server running on port ${PORT}`);
+  console.log(` Uploads folder served from: ${uploadsRoot}`);
 });
 
 module.exports = app;
