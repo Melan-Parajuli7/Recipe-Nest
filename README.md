@@ -238,3 +238,6 @@ npm run dev
 ---
 
 > Built by Mr.Melan Parajuli 
+
+going to add more features in a short of period stay tuned
+
