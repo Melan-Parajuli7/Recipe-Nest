@@ -4,7 +4,7 @@ require("dotenv").config();
 module.exports = {
     // server configuration
     PORT: process.env.PORT || 8080,
-    NODE_ENV : process.env.NODE_ENV || "development",
+        NODE_ENV : process.env.NODE_ENV || "development",
 
     // database configuration
     DB_URI: process.env.DB_URI || "mongodb://localhost:27017/recpipe_nest",
