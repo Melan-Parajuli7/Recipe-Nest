@@ -241,3 +241,14 @@ npm run dev
 
 going to add more features in a short of period stay tuned
 
+// 10/25/2026 
+
+found that there are major issues 
+    1.recipe listing
+    2.profile picture 
+    3.recipe saving options
+    4.admin login and other customer login issue 
+
+Work is under process from today 
+// -- Soon update will be done in the app --//
+

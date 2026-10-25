@@ -108,9 +108,9 @@ const Login = () => {
           </div>
 
           <button type="submit">Login</button>
-
           <span className="span">
-            New User..? <Link to="/signup">Register</Link>
+            Dont have an Account?
+            <Link to="/signup"> SignUp</Link>
           </span>
         </form>
       </div>
